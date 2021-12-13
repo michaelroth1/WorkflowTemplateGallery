@@ -3,9 +3,10 @@
 name: Build .Net project
 
 on:
-  push:
-    branches: [ main ]    
-
+  #push:
+    #branches: [ main ]    
+  workflow_dispatch:
+  
 env:
   PROJECT_FILE: mitoSoft.homeNet.WebApps.Flow.csproj
   PROJECT_FOLDER: mitoSoft.homeNet.WebApps.Flow
