@@ -1,0 +1,39 @@
+# This workflow triggers another workflow in a foreign repo
+
+name: Trigger workflow in different repo
+
+on:
+  #push:
+    #branches: [ main ]
+  workflow_dispatch:
+
+env:
+  OWNER: michaelroth1
+  REPO_NAME: mitoSoft.Razor.Components
+  WORKFLOW_NAME: update_submodules.yml
+  
+jobs:
+  deploys:
+    runs-on: ubuntu-latest
+    steps:     
+      - uses: actions/checkout@v2
+      
+      #trigger only if a build is possible
+      #- uses: actions/setup-dotnet@v1
+      #  with:
+      #   dotnet-version: 5.0.x
+      #      
+      #- run: dotnet build mitoSoft.Razor.homeNet.Components/mitoSoft.Razor.homeNet.Components.csproj -c Release
+      #- run: dotnet build mitoSoft.Razor.homeNet.TimerComponents/mitoSoft.Razor.homeNet.TimerComponents.csproj -c Release
+      #- run: dotnet build mitoSoft.homeNet.Clients/mitoSoft.homeNet.Clients.csproj -c Release
+      
+      - name: trigger workflow in foreign repo
+        uses: convictional/trigger-workflow-and-wait@v1.3.0
+        with:
+          owner: ${{env.OWNER}}
+          repo: ${{env.REPO_NAME}}
+          github_token: ${{ secrets.RELEASE_TOKEN }}
+          workflow_file_name: ${{env.WORKFLOW_NAME}}
+          ref: main #or master, if main branch i called master
+      
+      
