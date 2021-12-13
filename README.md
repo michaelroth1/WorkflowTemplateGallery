@@ -2,9 +2,7 @@
 
 Contains my most common *.yml workflows
 
-## git commands
-
-Often used git commands:
+## Often used Git commands
 
 - generate gitignore File: dotnet new gitignore
 - hard reset of all submodules: git submodule foreach --recursive git reset --hard
