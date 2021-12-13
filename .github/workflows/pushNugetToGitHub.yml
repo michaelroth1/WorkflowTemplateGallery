@@ -1,0 +1,45 @@
+#In this script it is important to set teh RepositoryUrl in the *.csproj file
+#<PropertyGroup>
+#  ...
+#  <PackageProjectUrl>https://github.com/michaelroth1/homeNet.Components</PackageProjectUrl>
+#  <RepositoryUrl>https://github.com/michaelroth1/homeNet.Components</RepositoryUrl>
+#</PropertyGroup>
+
+name: NuGet Generation
+
+on:
+  #push:
+    #branches:
+      #- main
+    #tags:
+      #- "v*"
+  workflow_dispatch:
+    
+env:
+  SOURCE_URL: https://nuget.pkg.github.com/michaelroth1/index.json
+  PROJECT_FILE: mitoSoft.Razor.homeNet.Components.csproj
+  PROJECT_FOLDER: mitoSoft.Razor.homeNet.Components
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Update NuGet package
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          #version is optional: without means latest
+          dotnet-version: 5.0.x 
+          source-url: ${{env.SOURCE_URL}}  
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.RELEASE_TOKEN}}        
+          
+      - name: Build solution and generate NuGet package
+        run: dotnet build ${{ env.PROJECT_FOLDER }}/${{ env.PROJECT_FILE }} -c Release          
+          
+      - name: Push generated package to GitHub registry
+        run: dotnet nuget push ./${{env.PROJECT_FOLDER}}/bin/Release/*.nupkg --api-key ${{secrets.RELEASE_TOKEN}} --source "${{env.SOURCE_URL}}" --skip-duplicate --no-symbols true
