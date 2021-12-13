@@ -1,4 +1,6 @@
-name: publish nuget
+# This workflow pushes a package to nuget.org
+
+name: Push Package To nuget.org
 on:
   #push:
    # branches:
