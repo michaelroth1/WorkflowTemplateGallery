@@ -1,7 +1,8 @@
 # This workflow builds a *.zip Folder of the project executable
 # either selfcontained or not and published it together with release notes 
 # whenever a new tag is created.
-
+# --self-contained build requires a RuntimeIdentifier in *.csproj:
+# <PropertyGroup> ... <RuntimeIdentifiers>win-x64</RuntimeIdentifiers> ... </PropertyGroup>
 name: Build Release Zip
 
 on:
